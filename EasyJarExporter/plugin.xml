@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+	<extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Eeasy Jar Exporter"
+            id="EasyJarExporter">
+      </category>
+      <view
+            id="easyjarexporter.views.JarManagementView"
+            name="Jar Management View"
+            icon="icons/sample.png"
+            class="easyjarexporter.views.JarManagementView"
+            category="Easy Jar Exporter"
+            inject="true">
+      </view>
+      <view
+            category="EasyJarExporter"
+            class="easyjarexporter.views.TestView"
+            icon="icons/sample.png"
+            id="easyjarexporter.views.TestView"
+            inject="true"
+            name="Test View">
+      </view>
+      <view
+            category="EasyJarExporter"
+            class="easyjarexporter.views.FileListViewer"
+            icon="icons/sample.png"
+            id="easyjarexporter.views.FileListViewer"
+            inject="true"
+            name="Export Jar">
+      </view>
+   </extension>	
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="EasyJarExporter.commands.category"
+            name="Easy Jar Category">
+      </category>
+      <command
+            categoryId="EasyJarExporter.commands.category"
+            name="Easy Jar Command"
+            id="EasyJarExporter.commands.sampleCommand">
+      </command>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="easyjarexporter.handlers.SampleHandler"
+            commandId="EasyJarExporter.commands.sampleCommand">
+      </handler>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="EasyJarExporter.commands.sampleCommand"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+6">
+      </key>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="EasyJarExporter.menus.sampleMenu"
+               label="Sample Menu"
+               mnemonic="M">
+            <command
+                  commandId="EasyJarExporter.commands.sampleCommand"
+                  id="EasyJarExporter.menus.sampleCommand"
+                  mnemonic="S">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="EasyJarExporter.toolbars.sampleToolbar">
+            <command
+                  id="EasyJarExporter.toolbars.sampleCommand"
+                  commandId="EasyJarExporter.commands.sampleCommand"
+                  icon="icons/sample.png"
+                  tooltip="Say hello world">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               id="easyjarexporter.views.TestView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.ProblemView">
+         </view>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               id="easyjarexporter.views.FileListViewer"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.ProblemView">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="easyjarexporter.preferences.PrefererencePage"
+            id="com.vogella.preferences.page.page1"
+            name="Easy Jar Exporter Preferences">
+      </page>
+   </extension>
+
+</plugin>
