@@ -206,7 +206,7 @@ public class FileListView extends ViewPart {
 		action1 = new Action() {
 			public void run() {
 				StructuredSelection selection = (StructuredSelection) viewer.getSelection();
-				selection.forEach((item) -> fileList.remove(item));
+				//selection.forEach((item) -> fileList.remove(item));
 				viewer.refresh();
 			}
 		};
