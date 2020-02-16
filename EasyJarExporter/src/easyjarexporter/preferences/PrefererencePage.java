@@ -1,15 +1,14 @@
 package easyjarexporter.preferences;
 
 import java.io.File;
-import java.util.prefs.Preferences;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -20,6 +19,7 @@ public class PrefererencePage extends FieldEditorPreferencePage implements IWork
 
 	private DirectoryFieldEditor mcpCoreRootDir;
 	private DirectoryFieldEditor outputDir;
+	private StringFieldEditor jarName;
 	
 	public PrefererencePage() {
 		super(GRID);
@@ -40,9 +40,11 @@ public class PrefererencePage extends FieldEditorPreferencePage implements IWork
 	protected void createFieldEditors() {
 		mcpCoreRootDir = new DirectoryFieldEditor("mcp_core_root_dir", "&MCP Core Root Directory:", getFieldEditorParent());
 		outputDir = new DirectoryFieldEditor("output_dir", "&Output Directory:", getFieldEditorParent());
+		jarName = new StringFieldEditor("export_jar_name", "Exported Jar File Name", getFieldEditorParent());
 		
 		addField(mcpCoreRootDir);
 		addField(outputDir);
+		addField(jarName);
 		
 //        addField(new BooleanFieldEditor("BOOLEAN_VALUE", "&A boolean preference", getFieldEditorParent()));
 //
@@ -63,6 +65,8 @@ public class PrefererencePage extends FieldEditorPreferencePage implements IWork
 		store.setValue("OUTPUT_DIR", outputDir.getStringValue());
 		
 		mcpCoreRootDir.store();
+		outputDir.store();
+		jarName.store();
 		
 		IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode("easyjarexporter.preferences");
 		
@@ -74,10 +78,6 @@ public class PrefererencePage extends FieldEditorPreferencePage implements IWork
 		} catch (BackingStoreException e) {
 			showErrorMessage("Could not set your preferences.", "Unknown Error", getFieldEditorParent().getShell());
 		}
-		
-		preferences.get("MCP_CORE_ROOT_DIR", "selam");
-		
-		
 	}
 	
 	private void initializeDefaults() {
@@ -102,7 +102,6 @@ public class PrefererencePage extends FieldEditorPreferencePage implements IWork
 	@Override
 	public boolean performOk() {
 		File file1 = new File(mcpCoreRootDir.getStringValue());
-		
 		if(file1 != null && file1.exists() && !file1.isDirectory() || !file1.canRead() || !file1.canExecute() || !file1.canWrite()) {
 			showErrorMessage(mcpCoreRootDir.getLabelText().replaceAll(":", "") + " is not a real directory or does not exist or you don't have "
 					+ "valid permissions. Please check your inputs again.", "Directory Error", getFieldEditorParent().getShell());
@@ -110,7 +109,6 @@ public class PrefererencePage extends FieldEditorPreferencePage implements IWork
 		}
 		
 		File file2 = new File(outputDir.getStringValue());
-		
 		if(file2 != null && !file2.isDirectory() || !file2.canRead() || !file2.canExecute() || !file2.canWrite()) {
 			showErrorMessage(outputDir.getLabelText().replaceAll(":", "") + " is not a real directory or you don't have "
 					+ "valid permissions. Please check your inputs again.", "Directory Error", getFieldEditorParent().getShell());
@@ -126,5 +124,4 @@ public class PrefererencePage extends FieldEditorPreferencePage implements IWork
 	private void showInfoMessage(String message, String title, Shell parent) {
 		MessageDialog.openInformation(parent, title, message);
 	}
-	
 }

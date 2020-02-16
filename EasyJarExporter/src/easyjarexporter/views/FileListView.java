@@ -35,31 +35,16 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.statushandlers.StatusAdapter;
+import org.eclipse.ui.statushandlers.StatusManager;
+import org.eclipse.ui.statushandlers.StatusManager.INotificationListener;
 
-import easyjarexporter.utils.MCPBuildCommandExecuter;
-import easyjarexporter.utils.MCPBuilder;
-
-/**
- * This sample class demonstrates how to plug-in a new workbench view. The view
- * shows data obtained from the model. The sample creates a dummy model on the
- * fly, but a real implementation would connect to the model available either in
- * this or another plug-in (e.g. the workspace). The view is connected to the
- * model using a content provider.
- * <p>
- * The view uses a label provider to define how model objects should be
- * presented in the view. Each view can present the same model objects using
- * different labels and icons, if needed. Alternatively, a single label provider
- * can be shared between views in order to ensure that objects of the same type
- * are presented in the same way everywhere.
- * <p>
- */
-
-public class FileListViewer extends ViewPart {
+public class FileListView extends ViewPart {
 
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "easyjarexporter.views.FileListViewer";
+	public static final String ID = "easyjarexporter.views.FileListView";
 
 	@Inject
 	IWorkbench workbench;
@@ -68,7 +53,6 @@ public class FileListViewer extends ViewPart {
 	private Action action1;
 	private Action action2;
 	private Action doubleClickAction;
-	
 	private Action clearListAction;
 	
 	private int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_DEFAULT;
@@ -96,21 +80,10 @@ public class FileListViewer extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		viewer.setLabelProvider(new ViewLabelProvider());
 		fileList = new ArrayList<String>();
-		
-		fileList.add("Busra");
-		fileList.add("Selcuk");
-		
 		viewer.setInput(fileList);
-		
-		MCPBuilder directoryHandler = new MCPBuilder();
-		directoryHandler.bringJarFiles();
-		MCPBuildCommandExecuter executer = new MCPBuildCommandExecuter(directoryHandler.createMcpBuildCommand());
-		executer.execute();
-
 		viewer.addDropSupport(operations, types, new DropTargetListener() {
 
 			@Override
@@ -196,7 +169,7 @@ public class FileListViewer extends ViewPart {
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
-				FileListViewer.this.fillContextMenu(manager);
+				FileListView.this.fillContextMenu(manager);
 			}
 		});
 		Menu menu = menuMgr.createContextMenu(viewer.getControl());
@@ -213,19 +186,19 @@ public class FileListViewer extends ViewPart {
 	private void fillLocalPullDown(IMenuManager manager) {
 		manager.add(action1);
 		manager.add(new Separator());
-		manager.add(action2);
+//		manager.add(action2);
 	}
 
 	private void fillContextMenu(IMenuManager manager) {
 		manager.add(action1);
-		manager.add(action2);
+//		manager.add(action2);
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
 	private void fillLocalToolBar(IToolBarManager manager) {
-		manager.add(action1);
-		manager.add(action2);
+//		manager.add(action1);
+//		manager.add(action2);
 		manager.add(clearListAction);
 	}
 
@@ -240,7 +213,7 @@ public class FileListViewer extends ViewPart {
 		action1.setText("Remove");
 		action1.setToolTipText("Action 1 tooltip");
 		action1.setImageDescriptor(
-				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ELCL_REMOVE));
 
 		action2 = new Action() {
 			public void run() {
@@ -285,5 +258,17 @@ public class FileListViewer extends ViewPart {
 	@Override
 	public void setFocus() {
 		viewer.getControl().setFocus();
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[easyjarexporter.views.FileListView]\n");
+		sb.append(super.toString());
+		return sb.toString();
+	}
+	
+	public List<String> getSelectedFiles() {
+		return this.fileList;
 	}
 }

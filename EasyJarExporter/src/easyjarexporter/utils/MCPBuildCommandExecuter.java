@@ -9,28 +9,33 @@ public class MCPBuildCommandExecuter {
 
 	private String command;
 	
-	public MCPBuildCommandExecuter(String command) {
+	private String workingDir;
+	
+	public MCPBuildCommandExecuter(String command, String workingDir) {
 		this.command = command;
+		this.workingDir = workingDir;
 	}
 	
-	public void execute() {
-		String[] args = new String[] { "/bin/bash", "-c", command};
+	public String execute() {
+		String[] bash = new String[] { "/bin/bash", "-c", command };
+		String result = null;
 		try {
-			ProcessBuilder pb = new ProcessBuilder(args);
-			pb.directory(new File("/home/sia/eclipse-workspaces/saydi_snap/mcp_core_root"));
+			ProcessBuilder pb = new ProcessBuilder(bash);
+			pb.directory(new File(workingDir));
 			Process proc = pb.start();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+			BufferedReader errorReader = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 			StringBuilder builder = new StringBuilder();
 			String line = null;
-			while ((line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null || (line = errorReader.readLine()) != null ) {
 				builder.append(line);
 				builder.append(System.getProperty("line.separator"));
 			}
-			String result = builder.toString();
+			result = builder.toString();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return result;
 	}
 
 	public String getCommand() {
@@ -41,6 +46,11 @@ public class MCPBuildCommandExecuter {
 		this.command = command;
 	}
 
-	
-	
+	public String getWorkingDir() {
+		return workingDir;
+	}
+
+	public void setWorkingDir(String workingDir) {
+		this.workingDir = workingDir;
+	}
 }

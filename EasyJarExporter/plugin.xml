@@ -26,9 +26,9 @@
       </view>
       <view
             category="EasyJarExporter"
-            class="easyjarexporter.views.FileListViewer"
+            class="easyjarexporter.views.FileListView"
             icon="icons/sample.png"
-            id="easyjarexporter.views.FileListViewer"
+            id="easyjarexporter.views.FileListView"
             inject="true"
             name="Export Jar">
       </view>
@@ -38,11 +38,11 @@
          point="org.eclipse.ui.commands">
       <category
             id="EasyJarExporter.commands.category"
-            name="Easy Jar Category">
+            name="Easy Jar Exporter">
       </category>
       <command
             categoryId="EasyJarExporter.commands.category"
-            name="Easy Jar Command"
+            name="Export Jar"
             id="EasyJarExporter.commands.sampleCommand">
       </command>
    </extension>
@@ -50,7 +50,7 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="easyjarexporter.handlers.SampleHandler"
+            class="easyjarexporter.handlers.JarExportHandler"
             commandId="EasyJarExporter.commands.sampleCommand">
       </handler>
    </extension>
@@ -71,7 +71,7 @@
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
                id="EasyJarExporter.menus.sampleMenu"
-               label="Sample Menu"
+               label="Easy Jar Export"
                mnemonic="M">
             <command
                   commandId="EasyJarExporter.commands.sampleCommand"
@@ -87,8 +87,8 @@
             <command
                   id="EasyJarExporter.toolbars.sampleCommand"
                   commandId="EasyJarExporter.commands.sampleCommand"
-                  icon="icons/sample.png"
-                  tooltip="Say hello world">
+                  icon="icons/fire.png"
+                  tooltip="Easily Export Jar">
             </command>
          </toolbar>
       </menuContribution>
@@ -107,7 +107,7 @@
       <perspectiveExtension
             targetID="org.eclipse.jdt.ui.JavaPerspective">
          <view
-               id="easyjarexporter.views.FileListViewer"
+               id="easyjarexporter.views.FileListView"
                ratio="0.5"
                relationship="right"
                relative="org.eclipse.ui.views.ProblemView">
